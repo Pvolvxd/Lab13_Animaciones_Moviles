@@ -5,6 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -38,8 +42,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             Lab13_AnimacionesTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    // Cambié Greeting por tu ejercicio para que se muestre al abrir la app
-                    Ejercicio1AnimatedVisibility(modifier = Modifier.padding(innerPadding))
+                    // EJERCICIO 1 (Comentado para que no llene la pantalla)
+                    // Ejercicio1AnimatedVisibility(modifier = Modifier.padding(innerPadding))
+
+                    // EJERCICIO 2 (Activo para probar el cambio de color)
+                    Ejercicio2CambioColor(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
@@ -75,10 +82,47 @@ fun Ejercicio1AnimatedVisibility(modifier: Modifier = Modifier) {
     }
 }
 
+@Composable
+fun Ejercicio2CambioColor(modifier: Modifier = Modifier) {
+    var isBlue by remember { mutableStateOf(true) }
+
+    /*
+    val animatedColor by animateColorAsState(
+        targetValue = if (isBlue) Color.Blue else Color.Green,
+        animationSpec = tween(durationMillis = 1000),
+        label = "Animación de Color"
+    )
+    */
+
+    val animatedColor by animateColorAsState(
+        targetValue = if (isBlue) Color.Blue else Color.Green,
+        animationSpec = spring(stiffness = Spring.StiffnessLow),
+        label = "Animación de Color"
+    )
+
+    Column(
+        modifier = modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Button(onClick = { isBlue = !isBlue }) {
+            Text(text = "Cambiar Color")
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Box(
+            modifier = Modifier
+                .size(150.dp)
+                .background(animatedColor)
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
-fun Ejercicio1Preview() {
+fun Ejercicio2Preview() {
     Lab13_AnimacionesTheme {
-        Ejercicio1AnimatedVisibility()
+        Ejercicio2CambioColor()
     }
 }
